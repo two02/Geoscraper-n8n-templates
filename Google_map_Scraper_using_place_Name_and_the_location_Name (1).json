@@ -1,0 +1,223 @@
+{
+  "name": "Google map Scraper using place Name and the location Name",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        -40
+      ],
+      "id": "c126c523-3371-4e13-ae8b-66e2b346138e",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.geoscraper.net/google/map/search/place",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Berserker-Token",
+              "value": "token"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "ll",
+              "value": "={{ $json.ll }}"
+            },
+            {
+              "name": "query",
+              "value": "={{ $json.query }}"
+            },
+            {
+              "name": "hl",
+              "value": "en"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        -40
+      ],
+      "id": "1fb00583-c696-45d8-9a51-e95edd5709d6",
+      "name": "Search the place using location"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        180,
+        -40
+      ],
+      "id": "17e719b7-cd3a-4731-8637-0adf4b650c68",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.geoscraper.net/google/map/place",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Berserker-Token",
+              "value": "token"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data_id",
+              "value": "={{ $json.data_id }}"
+            },
+            {
+              "name": "hl",
+              "value": "en"
+            },
+            {
+              "name": "catched",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        400,
+        -40
+      ],
+      "id": "fb7ba60b-e129-49b4-bde6-4759e1f0fb32",
+      "name": "Get Place Details"
+    },
+    {
+      "parameters": {
+        "content": "## Google Map Scraper using place name and location Name\n** Replace the token with Geoscraper Token",
+        "height": 220
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -580,
+        -300
+      ],
+      "id": "8c73a95f-ff92-4284-a4a7-1aea15002966",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6709cb32-49c6-4ab0-bb63-4a602c677f1f",
+              "name": "ll",
+              "value": "united states",
+              "type": "string"
+            },
+            {
+              "id": "36413218-fb4e-429d-b4f8-c1859ec897a2",
+              "name": "query",
+              "value": "cvs florida",
+              "type": "string"
+            },
+            {
+              "id": "624b714f-a0be-437e-90e0-1d92d1061ab3",
+              "name": "hl",
+              "value": "en",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        -40
+      ],
+      "id": "d72a0e62-66eb-448c-ab89-c0ac47599057",
+      "name": "Set Data"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search the place using location": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Get Place Details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Data": {
+      "main": [
+        [
+          {
+            "node": "Search the place using location",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fb86daa4-a9ff-4a85-9dba-632f403afc79",
+  "meta": {
+    "instanceId": "a59238150384bdb07b2ad750c78f556b892021d0da20d321a6f31b875669c199"
+  },
+  "id": "fmZuHbp5kRnvbzQt",
+  "tags": []
+}
