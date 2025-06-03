@@ -1,0 +1,907 @@
+{
+  "name": "Google map Review Scraper using place Name and the location Name",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        -40
+      ],
+      "id": "af5a2f37-0dda-4bea-9a4a-a3bd3a85f001",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.geoscraper.net/google/map/search/place",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Berserker-Token",
+              "value": "token"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "ll",
+              "value": "={{ $json.ll }}"
+            },
+            {
+              "name": "query",
+              "value": "={{ $json.query }}"
+            },
+            {
+              "name": "hl",
+              "value": "en"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -40,
+        -40
+      ],
+      "id": "479aec98-9a87-4561-a940-7426c040c304",
+      "name": "Search the place using location"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        180,
+        -40
+      ],
+      "id": "443714e4-522b-491b-b5fa-8b8c1c7a183b",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "content": "## Google map Review Scraper using place Name and the location Name\n** Replace the token with Geoscraper Token\nsample google sheet\nhttps://docs.google.com/spreadsheets/d/1amlIispA_asr-dABU0Wah90jl6DkQSofewCVU84tdfE/edit?usp=sharing",
+        "height": 340
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -740,
+        -140
+      ],
+      "id": "02143f43-1ea8-4f11-97b0-0e2020fda075",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6709cb32-49c6-4ab0-bb63-4a602c677f1f",
+              "name": "ll",
+              "value": "united states",
+              "type": "string"
+            },
+            {
+              "id": "36413218-fb4e-429d-b4f8-c1859ec897a2",
+              "name": "query",
+              "value": "cvs florida",
+              "type": "string"
+            },
+            {
+              "id": "624b714f-a0be-437e-90e0-1d92d1061ab3",
+              "name": "hl",
+              "value": "en",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -240,
+        -40
+      ],
+      "id": "3fab1342-c591-4dc9-a0d5-e086a83cd0c8",
+      "name": "Set Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "969e0ac7-bb2a-41bc-9af3-4b2d9ee0e7ae",
+              "leftValue": "={{ $json.next_page_token }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        940,
+        -40
+      ],
+      "id": "8dd4dba4-c5b1-4807-be9a-b730e57ccf05",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.geoscraper.net/google/map/review",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Berserker-Token",
+              "value": "token"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "data_id",
+              "value": "={{ $json.data_id }}"
+            },
+            {
+              "name": "hl",
+              "value": "en"
+            },
+            {
+              "name": "catched",
+              "value": "true"
+            },
+            {
+              "name": "token",
+              "value": "={{ $json.token }}"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        -40
+      ],
+      "id": "62de54bb-a2fc-4414-bf5a-8a6947e6fcea",
+      "name": "Get Reviews"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "06239812-85fc-448a-80e3-950f230119a2",
+              "name": "token",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        -40
+      ],
+      "id": "e0c9361b-8c0a-4838-a9d1-19142bfff9cb",
+      "name": "set next token"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b1773122-4eb6-4d4a-8c31-8eb9f6877a00",
+              "name": "token",
+              "value": "={{ $json.next_page_token }}",
+              "type": "string"
+            },
+            {
+              "id": "c09b6c93-69be-4c1a-b10f-0d2469d659ef",
+              "name": "data_id",
+              "value": "={{ $('set next token').item.json.data_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1220,
+        -20
+      ],
+      "id": "d02d56cd-7e68-4714-ae61-a94e5054cbef",
+      "name": "set new next token"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1amlIispA_asr-dABU0Wah90jl6DkQSofewCVU84tdfE",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1amlIispA_asr-dABU0Wah90jl6DkQSofewCVU84tdfE/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "rating",
+              "displayName": "rating",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "user",
+              "displayName": "user",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "snippet",
+              "displayName": "snippet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "details",
+              "displayName": "details",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "images",
+              "displayName": "images",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "review_id",
+              "displayName": "review_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "next_page_token",
+              "displayName": "next_page_token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1220,
+        -200
+      ],
+      "id": "6c702874-b29a-4706-a07e-3f563fe08fdf",
+      "name": "Save in the Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eTQ3JQOaSdFuamss",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Search the place using location": [
+      {
+        "json": {
+          "title": "CVS",
+          "gps_coordinates": {
+            "latitude": 25.7619582,
+            "longitude": -80.191509
+          },
+          "address": "Brickell Avenue, Miami, Florida, USA",
+          "data_id": "0x88d9b7e1f534e7f3:0x146c9d2971973550",
+          "country_code": "US",
+          "type": "place"
+        }
+      },
+      {
+        "json": {
+          "title": "CVS",
+          "gps_coordinates": {
+            "latitude": 25.7905514,
+            "longitude": -80.1309424
+          },
+          "address": "Lincoln Road, Miami Beach, Florida, USA",
+          "data_id": "0x88d9b36fc68a88a5:0x216ed102997e9f22",
+          "country_code": "US",
+          "type": "place"
+        }
+      },
+      {
+        "json": {
+          "title": "CVS",
+          "gps_coordinates": {
+            "latitude": 25.776355799999997,
+            "longitude": -80.1882035
+          },
+          "address": "Biscayne Boulevard, Miami, Florida, USA",
+          "data_id": "0x88d9b69e24526843:0x29e0e7b98b30e196",
+          "country_code": "US",
+          "type": "place"
+        }
+      },
+      {
+        "json": {
+          "title": "CVS",
+          "gps_coordinates": {
+            "latitude": 28.4314371,
+            "longitude": -81.4713409
+          },
+          "address": "International Drive, Orlando, Florida, USA",
+          "data_id": "0x88e77e4ad6aab15d:0xf5e3edd39a619c04",
+          "country_code": "US",
+          "type": "place"
+        }
+      },
+      {
+        "json": {
+          "title": "CVS",
+          "gps_coordinates": {
+            "latitude": 25.8130438,
+            "longitude": -80.12316799999999
+          },
+          "address": "Collins Avenue, Miami Beach, Florida, USA",
+          "data_id": "0x88d9b389c4d1dd85:0xa8b79c1e771b5fcd",
+          "country_code": "US",
+          "type": "place"
+        }
+      }
+    ],
+    "Get Reviews": [
+      {
+        "json": {
+          "rating": 5,
+          "date": "7 years ago",
+          "source": "Google",
+          "user": {
+            "name": "Heather Grey",
+            "link": "https://www.google.com/maps/contrib/104435703997023728496?hl=en",
+            "contributor_id": 104435703997023730000,
+            "thumbnail": "https://lh3.googleusercontent.com/a-/ALV-UjVHLBXQbacchdopMblQT2Ta8Kk-xfOgwrcseIFPkC-dETlmFU9JaQ=s120-c-rp-mo-ba3-br100",
+            "local_guide_level": 5,
+            "reviews": 1,
+            "photos": 1
+          },
+          "details": {
+            "mode": null,
+            "meal_type": null,
+            "price_range": null,
+            "food": null,
+            "service": null,
+            "atmosphere": null,
+            "recommended_dish_one": null
+          },
+          "images": null,
+          "review_id": null,
+          "snippet": null
+        }
+      },
+      {
+        "json": {
+          "rating": 5,
+          "date": "8 years ago",
+          "source": "Google",
+          "user": {
+            "name": "Y J",
+            "link": "https://www.google.com/maps/contrib/106647559323803090544?hl=en",
+            "contributor_id": 106647559323803090000,
+            "thumbnail": "https://lh3.googleusercontent.com/a-/ALV-UjWNosnVhJVTqp68HkQFdAAP2dFzARL5sp7t75MHejYVThV82f12gQ=s120-c-rp-mo-ba5-br100",
+            "local_guide_level": 7,
+            "reviews": 590,
+            "photos": 365
+          },
+          "details": {
+            "mode": null,
+            "meal_type": null,
+            "price_range": null,
+            "food": null,
+            "service": null,
+            "atmosphere": null,
+            "recommended_dish_one": null
+          },
+          "images": null,
+          "review_id": null,
+          "snippet": null
+        }
+      },
+      {
+        "json": {
+          "rating": 5,
+          "date": "8 years ago",
+          "source": "Google",
+          "user": {
+            "name": "Vicky Portacio",
+            "link": "https://www.google.com/maps/contrib/113797900525932246084?hl=en",
+            "contributor_id": 113797900525932250000,
+            "thumbnail": "https://lh3.googleusercontent.com/a-/ALV-UjXRgnn597PdGw5d5S8ULp3AuKoSAON4IES7pKR03N0zvyDOUKMU=s120-c-rp-mo-br100",
+            "reviews": 0,
+            "photos": 0,
+            "local_guide_level": null
+          },
+          "details": {
+            "mode": null,
+            "meal_type": null,
+            "price_range": null,
+            "food": null,
+            "service": null,
+            "atmosphere": null,
+            "recommended_dish_one": null
+          },
+          "images": null,
+          "review_id": null,
+          "snippet": null
+        }
+      },
+      {
+        "json": {
+          "rating": 5,
+          "date": "8 years ago",
+          "source": "Google",
+          "user": {
+            "name": "Axel Torres Peña",
+            "link": "https://www.google.com/maps/contrib/103375022907586007380?hl=en",
+            "contributor_id": 103375022907586000000,
+            "thumbnail": "https://lh3.googleusercontent.com/a-/ALV-UjW5zrq4FoFVKBBREqGT1TilhUAs0Bf-Bbrlo81F4ncF77z6bwmw=s120-c-rp-mo-br100",
+            "reviews": 2,
+            "photos": 0,
+            "local_guide_level": null
+          },
+          "details": {
+            "mode": null,
+            "meal_type": null,
+            "price_range": null,
+            "food": null,
+            "service": null,
+            "atmosphere": null,
+            "recommended_dish_one": null
+          },
+          "images": null,
+          "review_id": null,
+          "snippet": null
+        }
+      },
+      {
+        "json": {
+          "rating": 5,
+          "date": "8 years ago",
+          "source": "Google",
+          "user": {
+            "name": "Daria Maria Spătaru Lucian",
+            "link": "https://www.google.com/maps/contrib/117840342229501497992?hl=en",
+            "contributor_id": 117840342229501500000,
+            "thumbnail": "https://lh3.googleusercontent.com/a/ACg8ocJdtMoOBUrum3mY8DptEwpDHkFa4DTncrVKIh3LzjRyPwXnXw=s120-c-rp-mo-br100",
+            "reviews": 0,
+            "photos": 0,
+            "local_guide_level": null
+          },
+          "details": {
+            "mode": null,
+            "meal_type": null,
+            "price_range": null,
+            "food": null,
+            "service": null,
+            "atmosphere": null,
+            "recommended_dish_one": null
+          },
+          "images": null,
+          "review_id": null,
+          "snippet": null
+        }
+      },
+      {
+        "json": {
+          "next_page_token": null
+        }
+      }
+    ],
+    "Limit": [
+      {
+        "json": {
+          "title": "CVS",
+          "gps_coordinates": {
+            "latitude": 25.7619582,
+            "longitude": -80.191509
+          },
+          "address": "Brickell Avenue, Miami, Florida, USA",
+          "data_id": "0x88d9b7e1f534e7f3:0x146c9d2971973550",
+          "country_code": "US",
+          "type": "place"
+        }
+      }
+    ],
+    "set next token": [
+      {
+        "json": {
+          "title": "CVS",
+          "gps_coordinates": {
+            "latitude": 25.7619582,
+            "longitude": -80.191509
+          },
+          "address": "Brickell Avenue, Miami, Florida, USA",
+          "data_id": "0x88d9b7e1f534e7f3:0x146c9d2971973550",
+          "country_code": "US",
+          "type": "place",
+          "token": ""
+        }
+      }
+    ],
+    "Set Data": [
+      {
+        "json": {
+          "ll": "united states",
+          "query": "cvs florida",
+          "hl": "en"
+        }
+      }
+    ],
+    "set new next token": [
+      {
+        "json": {
+          "token": "CAESYkNBRVFxZ0VhUWtOcE9FbEJVa2x1UTJkdlFWQTNYMkpmWDE5ZlgxOWZYMFZvUXpCTGNscFRRMVp2TFU1U1V6Qk1SamhCUVVGQlFVZG5abDlCY0d0WFNuUlVZVWRCUVdsQlFR",
+          "data_id": "0x88d9b7e1f534e7f3:0x146c9d2971973550"
+        }
+      }
+    ],
+    "Save in the Google Sheets": [
+      {
+        "json": {
+          "rating": 5,
+          "date": "7 years ago",
+          "source": "Google",
+          "user": {
+            "name": "Heather Grey",
+            "link": "https://www.google.com/maps/contrib/104435703997023728496?hl=en",
+            "contributor_id": 104435703997023730000,
+            "thumbnail": "https://lh3.googleusercontent.com/a-/ALV-UjVHLBXQbacchdopMblQT2Ta8Kk-xfOgwrcseIFPkC-dETlmFU9JaQ=s120-c-rp-mo-ba3-br100",
+            "local_guide_level": 5,
+            "reviews": 1,
+            "photos": 1
+          },
+          "details": {
+            "mode": null,
+            "meal_type": null,
+            "price_range": null,
+            "food": null,
+            "service": null,
+            "atmosphere": null,
+            "recommended_dish_one": null
+          },
+          "images": null,
+          "review_id": null,
+          "snippet": null
+        }
+      },
+      {
+        "json": {
+          "rating": 5,
+          "date": "8 years ago",
+          "source": "Google",
+          "user": {
+            "name": "Y J",
+            "link": "https://www.google.com/maps/contrib/106647559323803090544?hl=en",
+            "contributor_id": 106647559323803090000,
+            "thumbnail": "https://lh3.googleusercontent.com/a-/ALV-UjWNosnVhJVTqp68HkQFdAAP2dFzARL5sp7t75MHejYVThV82f12gQ=s120-c-rp-mo-ba5-br100",
+            "local_guide_level": 7,
+            "reviews": 590,
+            "photos": 365
+          },
+          "details": {
+            "mode": null,
+            "meal_type": null,
+            "price_range": null,
+            "food": null,
+            "service": null,
+            "atmosphere": null,
+            "recommended_dish_one": null
+          },
+          "images": null,
+          "review_id": null,
+          "snippet": null
+        }
+      },
+      {
+        "json": {
+          "rating": 5,
+          "date": "8 years ago",
+          "source": "Google",
+          "user": {
+            "name": "Vicky Portacio",
+            "link": "https://www.google.com/maps/contrib/113797900525932246084?hl=en",
+            "contributor_id": 113797900525932250000,
+            "thumbnail": "https://lh3.googleusercontent.com/a-/ALV-UjXRgnn597PdGw5d5S8ULp3AuKoSAON4IES7pKR03N0zvyDOUKMU=s120-c-rp-mo-br100",
+            "reviews": 0,
+            "photos": 0,
+            "local_guide_level": null
+          },
+          "details": {
+            "mode": null,
+            "meal_type": null,
+            "price_range": null,
+            "food": null,
+            "service": null,
+            "atmosphere": null,
+            "recommended_dish_one": null
+          },
+          "images": null,
+          "review_id": null,
+          "snippet": null
+        }
+      },
+      {
+        "json": {
+          "rating": 5,
+          "date": "8 years ago",
+          "source": "Google",
+          "user": {
+            "name": "Axel Torres Peña",
+            "link": "https://www.google.com/maps/contrib/103375022907586007380?hl=en",
+            "contributor_id": 103375022907586000000,
+            "thumbnail": "https://lh3.googleusercontent.com/a-/ALV-UjW5zrq4FoFVKBBREqGT1TilhUAs0Bf-Bbrlo81F4ncF77z6bwmw=s120-c-rp-mo-br100",
+            "reviews": 2,
+            "photos": 0,
+            "local_guide_level": null
+          },
+          "details": {
+            "mode": null,
+            "meal_type": null,
+            "price_range": null,
+            "food": null,
+            "service": null,
+            "atmosphere": null,
+            "recommended_dish_one": null
+          },
+          "images": null,
+          "review_id": null,
+          "snippet": null
+        }
+      },
+      {
+        "json": {
+          "rating": 5,
+          "date": "8 years ago",
+          "source": "Google",
+          "user": {
+            "name": "Daria Maria Spătaru Lucian",
+            "link": "https://www.google.com/maps/contrib/117840342229501497992?hl=en",
+            "contributor_id": 117840342229501500000,
+            "thumbnail": "https://lh3.googleusercontent.com/a/ACg8ocJdtMoOBUrum3mY8DptEwpDHkFa4DTncrVKIh3LzjRyPwXnXw=s120-c-rp-mo-br100",
+            "reviews": 0,
+            "photos": 0,
+            "local_guide_level": null
+          },
+          "details": {
+            "mode": null,
+            "meal_type": null,
+            "price_range": null,
+            "food": null,
+            "service": null,
+            "atmosphere": null,
+            "recommended_dish_one": null
+          },
+          "images": null,
+          "review_id": null,
+          "snippet": null
+        }
+      },
+      {
+        "json": {
+          "next_page_token": null
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search the place using location": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "set next token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Data": {
+      "main": [
+        [
+          {
+            "node": "Search the place using location",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Save in the Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "set new next token",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Reviews": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set next token": {
+      "main": [
+        [
+          {
+            "node": "Get Reviews",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set new next token": {
+      "main": [
+        [
+          {
+            "node": "Get Reviews",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a348d2da-46f5-4b0a-8fb3-496911f95992",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a59238150384bdb07b2ad750c78f556b892021d0da20d321a6f31b875669c199"
+  },
+  "id": "2ANOcHcs1RUZEOnz",
+  "tags": []
+}
